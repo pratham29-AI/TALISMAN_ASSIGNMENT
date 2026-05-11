@@ -115,7 +115,7 @@ def stream_soap_note(clean_transcript: str, api_key: str) -> Generator[str, None
     """Yield GPT-4o token chunks that structure the transcript into a SOAP note."""
     client = OpenAI(api_key=api_key)
     stream = client.chat.completions.create(
-        model="gpt-4.1-mini",
+        model="gpt-4o",
         messages=[
             {"role": "system", "content": _SOAP_SYSTEM},
             {"role": "user", "content": f"Medical dictation transcript:\n\n{clean_transcript}"},
