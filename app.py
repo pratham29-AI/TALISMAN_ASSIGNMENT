@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 from services.transcriber import transcribe_audio
 from services.llm import stream_clean_transcript, stream_soap_note
+from services.docx_export import transcript_to_docx, soap_to_docx
 
 load_dotenv()
 
@@ -272,12 +273,18 @@ if uploaded is not None:
             st.markdown(st.session_state.clean_transcript)
 
     if st.session_state.clean_transcript:
-        dl_col, _ = st.columns([1, 4])
-        dl_col.download_button(
-            "Download transcript",
+        dl1, dl2, _ = st.columns([1, 1, 3])
+        dl1.download_button(
+            "Download .docx",
+            data=transcript_to_docx(st.session_state.clean_transcript),
+            file_name="transcript.docx",
+            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        )
+        dl2.download_button(
+            "Download .md",
             data=st.session_state.clean_transcript,
-            file_name="transcript.txt",
-            mime="text/plain",
+            file_name="transcript.md",
+            mime="text/markdown",
         )
 
         with st.expander("View raw gpt-4o-transcribe output"):
@@ -311,9 +318,15 @@ if uploaded is not None:
                 st.markdown(st.session_state.soap_note)
 
         if st.session_state.soap_note:
-            dl_col2, _ = st.columns([1, 4])
-            dl_col2.download_button(
-                "Download SOAP note",
+            dl3, dl4, _ = st.columns([1, 1, 3])
+            dl3.download_button(
+                "Download .docx",
+                data=soap_to_docx(st.session_state.soap_note),
+                file_name="soap_note.docx",
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            )
+            dl4.download_button(
+                "Download .md",
                 data=st.session_state.soap_note,
                 file_name="soap_note.md",
                 mime="text/markdown",
